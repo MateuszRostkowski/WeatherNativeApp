@@ -18,7 +18,7 @@ export default class App extends Component {
         <Text style={[styles.textStyle, styles.largeText]}>
           24°
         </Text>
-        <SearchInput />
+        <SearchInput placeholder="Search any city" />
       </KeyboardAvoidingView>
     );
   }
