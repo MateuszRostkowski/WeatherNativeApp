@@ -4,7 +4,16 @@ import SearchInput from "./components/SearchInput"
 import getImageForWeather from "./utils/getImageForWeather"
 
 export default class App extends Component {
+  state = {
+    city: "San Francisco",
+  }
+  
+  handleUpdateLocation = city => {
+    this.setState({ city })
+  }
+
   render() {
+    const { city } = this.state;
     return (
       <KeyboardAvoidingView
        style={styles.container}
@@ -17,7 +26,7 @@ export default class App extends Component {
         > 
           <View style={styles.detailsContainer}>
             <Text style={[styles.textStyle, styles.largeText]}>
-              San Francisco
+              {city}
             </Text>
             <Text style={[styles.textStyle, styles.smallText]}>
               Light Cloud
@@ -25,7 +34,7 @@ export default class App extends Component {
             <Text style={[styles.textStyle, styles.largeText]}>
               24°
             </Text>
-            <SearchInput placeholder="Search any city" />
+            <SearchInput placeholder="Search any city" onSubmit={this.handleUpdateLocation}/>
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>
