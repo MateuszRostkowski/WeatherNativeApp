@@ -5,6 +5,7 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
   ActivityIndicator,
   StatusBar,
   ImageBackground
@@ -21,6 +22,7 @@ export default class App extends Component {
     errorName: "",
     location: "",
     temperature: 0,
+    degrees: "C",
     weather: ''
   };
 
@@ -55,8 +57,24 @@ export default class App extends Component {
     this.setState({ city });
   };
 
+  handlePressButton = (degrees) => {
+    if (degrees == "C") {
+      this.setState({ degrees: "F" })
+    } else {
+      this.setState({ degrees: "C" })
+    }
+  }
+
+  get actualTemperature() {
+    if(this.state.degrees == "C") {
+      return this.state.temperature
+    } else {
+      return this.state.temperature * 1.8 + 32
+    }
+  }
+
   render() {
-    const { location, error, errorName, loading, temperature, weather } = this.state;
+    const { location, error, loading, temperature, weather, degrees } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <StatusBar barStyle="light-content"/>
@@ -83,16 +101,21 @@ export default class App extends Component {
                     <Text style={[styles.textStyle, styles.smallText]}>
                       { weather }
                     </Text>
-                    <Text style={[styles.textStyle, styles.largeText]}>
-                      {`${Math.round(temperature)}°`}
-                    </Text>
-                    
+                    <TouchableOpacity
+                      onPress={() => this.handlePressButton(degrees)}
+                    >
+                      <View style={styles.button}>
+                        <Text style={[styles.textStyle, styles.largeText]}>
+                          {`${Math.round(this.actualTemperature)}°${degrees}`}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 )}
                 <SearchInput
                   placeholder="Search any city"
                   onSubmit={this.handleUpdateLocation}
-                />     
+                />
               </View>
             )}
           </View>
