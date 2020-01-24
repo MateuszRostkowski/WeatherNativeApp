@@ -51,7 +51,6 @@ export default class App extends Component {
         })
       }
     })
-    
 
     this.setState({ city });
   };
@@ -62,7 +61,7 @@ export default class App extends Component {
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <StatusBar barStyle="light-content"/>
         <ImageBackground
-          source={getImageForWeather("Clear")}
+          source={getImageForWeather(weather)}
           style={styles.imageContainer}
           imageStyle={styles.image}
         >
@@ -71,9 +70,8 @@ export default class App extends Component {
             {!loading && (
               <View>
                 {error && (
-                  <Text>
-                    Could not load load weather, please try another 
-                    location. This is error that happend:
+                  <Text style={[styles.textStyle, styles.smallText, styles.paddingForText]}>
+                    Could not load load weather, please try another location.
                   </Text>
                 )}
 
@@ -88,12 +86,13 @@ export default class App extends Component {
                     <Text style={[styles.textStyle, styles.largeText]}>
                       {`${Math.round(temperature)}°`}
                     </Text>
-                    <SearchInput
-                      placeholder="Search any city"
-                      onSubmit={this.handleUpdateLocation}
-                    />
+                    
                   </View>
-                )}                
+                )}
+                <SearchInput
+                  placeholder="Search any city"
+                  onSubmit={this.handleUpdateLocation}
+                />     
               </View>
             )}
           </View>
@@ -112,6 +111,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.2)",
     justifyContent: "center"
+  },
+  paddingForText: {
+    paddingVertical: 20,
   },
   imageContainer: {
     flex: 1
