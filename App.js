@@ -35,13 +35,14 @@ export default class App extends Component {
 
     this.setState({loading: true}, async () => {
       try {
-        const locationId = await fetchLocationId(city);
+        const { locationId, locations} = await fetchLocationId(city);
         const { location, weather, temperature } = await fetchWeather(locationId) 
-    
+        
+        console.log(locations)
         this.setState({
           loading: false,
           error: false,
-          location: city,
+          location,
           weather,
           temperature,
         })
@@ -115,6 +116,7 @@ export default class App extends Component {
                 <SearchInput
                   placeholder="Search any city"
                   onSubmit={this.handleUpdateLocation}
+                  onChangeText={}
                 />
               </View>
             )}
