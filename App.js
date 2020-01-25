@@ -116,7 +116,6 @@ export default class App extends Component {
                 <SearchInput
                   placeholder="Search any city"
                   onSubmit={this.handleUpdateLocation}
-                  onChangeText={}
                 />
               </View>
             )}
