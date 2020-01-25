@@ -66,6 +66,19 @@ export default class App extends Component {
     }
   }
 
+  onChangeText = async (text) => {
+    console.log(text)
+    try {
+      const { locations } = await fetchLocationId(text);  
+      const cities = locations.map((city) => {
+        return city.title
+      })
+      console.log(cities)
+    } catch (e) {
+      console.log("error")
+    }
+  }
+
   get actualTemperature() {
     if(this.state.degrees == "C") {
       return this.state.temperature
@@ -116,6 +129,7 @@ export default class App extends Component {
                 <SearchInput
                   placeholder="Search any city"
                   onSubmit={this.handleUpdateLocation}
+                  onChangeText={this.onChangeText}
                 />
               </View>
             )}

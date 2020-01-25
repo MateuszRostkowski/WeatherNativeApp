@@ -17,7 +17,11 @@ export default class SearchInput extends Component {
   }  
 
   handleChangeText = text => {
-    this.setState({ text });
+    const { onChangeText } = this.props
+    this.setState({ text }, () => {
+      onChangeText(text)
+    });
+    
   };
 
   handleSubmitEditing = () => {
