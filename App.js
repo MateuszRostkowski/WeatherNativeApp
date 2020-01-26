@@ -48,12 +48,14 @@ export default class App extends Component {
           location,
           weather,
           temperature,
+          cities: []
         })
       } catch (e) {
         this.setState({
           loading: false,
           error: true,
-          errorName: e
+          errorName: e,
+          cities: []
         })
       }
     })
@@ -165,11 +167,16 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   scrollViewContainer: {
+    position: "relative",
+    top: -6,
+    zIndex: -1,
     height: 200,
     width: 300,
     backgroundColor: "rgba(0, 0, 0, 0.4)",
     padding: 10,
     marginHorizontal: 40,
+    borderBottomRightRadius: 5,
+    borderBottomLeftRadius: 5,
   },
   container: {
     flex: 1,
