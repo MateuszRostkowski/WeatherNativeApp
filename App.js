@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StatusBar,
-  ImageBackground
+  ImageBackground,
+  ScrollView
 } from "react-native";
 
 import SearchInput from "./components/SearchInput";
@@ -17,13 +18,15 @@ import { fetchLocationId, fetchWeather } from "./utils/api"
 
 export default class App extends Component {
   state = {
+    text: '',
     loading: false,
     error: false,
     errorName: "",
     location: "",
     temperature: 0,
     degrees: "C",
-    weather: ''
+    weather: '',
+    cities: []
   };
 
   componentDidMount() {
@@ -66,17 +69,20 @@ export default class App extends Component {
     }
   }
 
-  onChangeText = async (text) => {
-    console.log(text)
-    try {
-      const { locations } = await fetchLocationId(text);  
-      const cities = locations.map((city) => {
-        return city.title
-      })
-      console.log(cities)
-    } catch (e) {
-      console.log("error")
-    }
+  onChangeText = (text) => {
+    this.setState({ text }, async () => {
+      try {
+        const { locations } = await fetchLocationId(text);  
+        const cities = locations.map((city) => {
+          return city.title
+        })
+        this.setState({ cities })
+      } catch (e) {
+        if(this.state.text.length > 0) {
+          this.setState({ cities: ["Can't find location with that name"] })
+        }
+      }
+    })
   }
 
   get actualTemperature() {
@@ -88,7 +94,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { location, error, loading, temperature, weather, degrees } = this.state;
+    const { location, error, loading, weather, degrees, cities, text } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <StatusBar barStyle="light-content"/>
@@ -100,7 +106,7 @@ export default class App extends Component {
           <View style={styles.detailsContainer}>
             <ActivityIndicator animating={loading} color="white" size="large" />
             {!loading && (
-              <View>
+              <View style={styles.centerContainer}>
                 {error && (
                   <Text style={[styles.textStyle, styles.smallText, styles.paddingForText]}>
                     Could not load load weather, please try another location.
@@ -131,8 +137,25 @@ export default class App extends Component {
                   onSubmit={this.handleUpdateLocation}
                   onChangeText={this.onChangeText}
                 />
+                {cities.length > 0 && text.length > 0 && <ScrollView style={styles.scrollViewContainer}>
+                  {cities.map((city, index) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.handleUpdateLocation(city)
+                          this.setState({cities: []})
+                        }}
+                        key={index}
+                      >
+                        <Text style={[styles.textStyle, styles.smallText, styles.smallPaddingForText]}>
+                          {city}
+                        </Text>
+                      </TouchableOpacity>
+                    )
+                  })}
+                </ScrollView>}
               </View>
-            )}
+            )}            
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>
@@ -141,9 +164,17 @@ export default class App extends Component {
 }
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    height: 200,
+    width: 300,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    padding: 10,
+    marginHorizontal: 40,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+    justifyContent: "center"
   },
   detailsContainer: {
     flex: 1,
@@ -152,6 +183,9 @@ const styles = StyleSheet.create({
   },
   paddingForText: {
     paddingVertical: 20,
+  },
+  smallPaddingForText: {
+    paddingVertical: 8,
   },
   imageContainer: {
     flex: 1
