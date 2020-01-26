@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { StyleSheet, TextInput, View, Text } from "react-native";
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 
 export default class SearchInput extends Component {
   state = {
     text: ""
   };
 
-  static PropTypes = {
-    onSubmit: PropTypes.func.isRequired,
-    placeholder: PropTypes.string,
+  static propTypes = {
+    onSubmit: propTypes.func.isRequired,
+    placeholder: propTypes.string,
   }
   
   static defaultProps = {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 300,
     marginTop: 20,
-    backgroundColor: "#666",
+    backgroundColor: "#666",    
     marginHorizontal: 40,
     paddingHorizontal: 10,
     borderRadius: 5
